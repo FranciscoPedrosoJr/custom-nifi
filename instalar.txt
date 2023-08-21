@@ -1,0 +1,16 @@
+- CMD
+- Acessar a pasta do projeto
+- Digitar o comando: 
+mvn archetype:generate
+- Espera
+- digitar nifi
+- Selecionar o "org.apache.nifi:nifi-processor-bundle-archetype"
+- Escolher a versão do NiFi que esta instalado
+- Nomear o projeto
+- Desenvolver
+- No CMD ou no maven direto do IDE executar este comando:
+mvn clean install -Denforcer.skip=true
+- Usar o comando:
+docker cp C:\Estavel\custom-nifi\nifi-geraJWT\nifi-geraJWT-nar\target/nifi-geraJWT-nar-1.0-SNAPSHOT.nar nifi:/opt/nifi/nifi-current/lib/
+ Para mover o arquivo gerado com o código para o Docker NiFi.
+- Testar

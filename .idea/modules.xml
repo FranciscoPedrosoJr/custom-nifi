@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/custom-nifi.iml" filepath="$PROJECT_DIR$/.idea/custom-nifi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nifi-geraJWT/nifi-geraJWT.iml" filepath="$PROJECT_DIR$/nifi-geraJWT/nifi-geraJWT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nifi-geraJWT/nifi-geraJWT-nar/nifi-geraJWT-nar.iml" filepath="$PROJECT_DIR$/nifi-geraJWT/nifi-geraJWT-nar/nifi-geraJWT-nar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nifi-geraJWT/nifi-geraJWT-processors/nifi-geraJWT-processors.iml" filepath="$PROJECT_DIR$/nifi-geraJWT/nifi-geraJWT-processors/nifi-geraJWT-processors.iml" />
+    </modules>
+  </component>
+</project>
