@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.nifi.components.PropertyDescriptor;
+import org.apache.nifi.expression.AttributeValueDecorator;
+import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.ProcessContext;
@@ -21,20 +23,24 @@ public class geraJWT extends AbstractProcessor {
             .Builder().name("Client ID")
             .description("ClientID da CAF")
             .required(true)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
+    public static final int DEFAULT_EXPIRATION_HOURS = 24;
+    /* Alterado para que o tempo de expiração fique fixo em 24 horas
     public static final PropertyDescriptor EXPIRATION_PROPERTY = new PropertyDescriptor
             .Builder().name("Expiration")
             .description("Tempo de expiração em horas")
             .required(false)
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
-            .build();
+            .build();*/
 
     public static final PropertyDescriptor PEOPLE_ID_PROPERTY = new PropertyDescriptor
             .Builder().name("People ID")
             .description("CPF")
             .required(false)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
@@ -42,6 +48,7 @@ public class geraJWT extends AbstractProcessor {
             .Builder().name("clientSecret")
             .description("Informe seu clientSecret")
             .required(true)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
@@ -65,13 +72,14 @@ public class geraJWT extends AbstractProcessor {
     protected void init(final ProcessorInitializationContext context) {
         descriptors = new ArrayList<>();
         descriptors.add(CLIENT_ID_PROPERTY);
-        descriptors.add(EXPIRATION_PROPERTY);
+        /*descriptors.add(EXPIRATION_PROPERTY);*/
         descriptors.add(PEOPLE_ID_PROPERTY);
         descriptors.add(SECRET_KEY);
         descriptors = Collections.unmodifiableList(descriptors);
 
         relationships = new HashSet<>();
         relationships.add(SUCCESS_RELATIONSHIP);
+        relationships.add(FAILURE_RELATIONSHIP);
         relationships = Collections.unmodifiableSet(relationships);
 
     }
@@ -94,13 +102,13 @@ public class geraJWT extends AbstractProcessor {
         }
 
         String clientId = context.getProperty(CLIENT_ID_PROPERTY).getValue();
-        int expirationHours = context.getProperty(EXPIRATION_PROPERTY).asInteger();
+        /*int expirationHours = context.getProperty(EXPIRATION_PROPERTY).asInteger();*/
         String peopleId = context.getProperty(PEOPLE_ID_PROPERTY).getValue();
         clientSecret = context.getProperty(SECRET_KEY).getValue();
 
         getLogger().info("Valor do Client Secret: " + clientSecret);
 
-        long expirationMillis = expirationHours * 3600 * 1000;
+        long expirationMillis = DEFAULT_EXPIRATION_HOURS * 3600 * 1000;
         String jwtToken = generateJwtToken(clientId, expirationMillis, peopleId);
 
         flowFile = session.putAttribute(flowFile, "jwt_token", jwtToken);
